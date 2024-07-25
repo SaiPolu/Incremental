@@ -379,5 +379,99 @@ const PaymentPage = () => {
 }
  
 export default PaymentPage
+
+import React, { useState } from
+'react'
+import ThankModal from './ThankModal';
+ 
+const FeedBackModal = () => {
+    const [rating,setRating] = useState(0)
+    const [description,setDescription] = ('');
+    const [errors,setErrors] = ([]);
+ 
+    const handleStars = () =>{
+ 
+    }
+ 
+    const handleSubmit = (e) =>{
+        e.preventDefault();
+        window.$('#feedback').modal('hide');
+        window.$('#thank').modal('show');
+    }
+    
+ 
+  return (
+      <div className='modal fade' id='feedBack' tabIndex="-1" role='dialog' aria-labelledby='Modal' aria-hidden="true">
+        <ThankModal/>
+            <div className="modal-dialog modal-dialog-centered" role="document">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title position-absolute" id='title'>Please Provide feedback</h5>
+                        <button type='button' className='close' data-dismiss="modal" aria-label='Close'>
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+ 
+                    <div className="modal-body">
+                        <p>Rating</p>
+                        {
+                            [1,2,3,4,5].map((index)=>(
+                                <span key={index}
+                                className={`star ${rating >= index? 'selected': '' }`}
+                                onClick={()=>handleStars(index)}
+                                >
+                                    <span className='text-lg text-warning'>
+                                    &#9733;
+                                    </span>
+                                </span>
+                            ))
+                        }
+                        <form onSubmit={handleSubmit} >
+                            <div className="form-group">
+                                <label htmlFor="id">Enter Description</label>
+                                <textarea className="form-control" id="id" cols="5" rows="2" value={description} onChange={(e)=>setDescription(e.target.value)}></textarea>
+                            </div>
+                        </form>
+                        <div className="modal-footer">
+                            <button className='btn btn-primary' data-toggle="modal" data-target="#thank">Submit</button>
+                        </div>
+                    </div>
+ 
+                </div>
+            </div>
+        </div>
+  )
+}
+ 
+export default FeedBackModal
+ 
+ 
+import React from 'react'
+import thankyou from '../assets/thankyou.svg'
+ 
+const ThankModal = () => {
+    return (
+        <div className='modal fade' id='thank' tabIndex="-1" role='dialog' aria-labelledby='Modal' aria-hidden="true">
+            <div className="modal-dialog modal-dialog-centered" role="document">
+                <div className="modal-content text-center">
+                    <div className="modal-header justify-content-center">
+                        <h1 className="modal-title text-center" id='title'> Thank You!</h1>
+                        <button type='button' className='close' data-dismiss="modal"  aria-label='Close'>
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div className="modal-body text-center">
+                        <img src={thankyou} alt="thank you"  className='img-fluid'/>
+                    </div>
+                    <div className="modal-footer justify-content-center">
+                        <p className='text-center mb-0'>Please Visit Again</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+ 
+export default ThankModal
  
  
