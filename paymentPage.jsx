@@ -230,3 +230,154 @@ button:hover{
 .checkout-button:hover{
     background-color: #45a049;
 }
+
+
+
+2nd Approach
+
+
+import React, { useState } from 'react'
+import './payment.component.css'
+import credit from '../../../assets/paymentGateway/creditCard.svg'
+import upiIcon from '../../../assets/paymentGateway/upi.png'
+import cashIcon from '../../../assets/paymentGateway/cash.svg'
+import EWalletIcon from '../../../assets/paymentGateway/eWallet.svg'
+import { Link } from 'react-router-dom'
+import FeedBackModal from '../../../utils/FeedBackModal'
+ 
+const PaymentPage = () => {
+  const [form, setForm] = useState({
+    cardNumber: '',
+    cvv: '',
+    expiryDate: '',
+    nameOnCard: ''
+  });
+ 
+  const [errors, setErrors] = useState({});
+ 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
+ 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let validationErrors = {};
+ 
+    // Card Number validation
+    if (!form.cardNumber || form.cardNumber.length !== 16) {
+      validationErrors.cardNumber = 'Invalid card number (must be 16 digits)';
+    }
+ 
+    // CVV validation
+    if (!form.cvv || form.cvv.length !== 3) {
+      validationErrors.cvv = 'Invalid CVV (must be 3 digits)';
+    }
+ 
+    // Expiry Date validation
+    const expiryRegex = /^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/;
+    if (!form.expiryDate || !expiryRegex.test(form.expiryDate)) {
+      validationErrors.expiryDate = 'Invalid expiry date (MM/YYYY format)';
+    }
+ 
+    // Name on Card validation
+    if (!form.nameOnCard) {
+      validationErrors.nameOnCard = 'Card name is required';
+    }
+ 
+    if (Object.keys(validationErrors).length === 0) {
+      // No errors, submit the form
+      console.log('Form submitted:', form);
+    } else {
+      // Set errors to state
+      setErrors(validationErrors);
+    }
+  };
+ 
+  return (
+    <div className='payment-page'>
+      <div className='container mt-5'>
+        <FeedBackModal />
+        <div className="card">
+          <div className="card-body">
+            <div className="text-center mb-4">Choose your payment method</div>
+            <div className="payment-icons text-center mb-3">
+              <img src={credit} alt="Credit" />
+              <img src={upiIcon} alt="UPI" />
+              <img src={cashIcon} alt="cash" />
+              <img src={EWalletIcon} alt="E-Wallet" />
+            </div>
+            <div className="payment-container">
+              <form onSubmit={handleSubmit}>
+                <div className="form-group">
+                  <label htmlFor="cardNumber">Card Number*</label>
+                  <input
+                    type="text"
+                    name="cardNumber"
+                    value={form.cardNumber}
+                    onChange={handleChange}
+                    className={`form-control ${errors.cardNumber ? 'is-invalid' : ''}`}
+                  />
+                  {errors.cardNumber && <div className="invalid-feedback">{errors.cardNumber}</div>}
+                </div>
+                <div className="form-group">
+                  <label htmlFor="cvv">CVV Number*</label>
+                  <input
+                    type="text"
+                    name="cvv"
+                    value={form.cvv}
+                    onChange={handleChange}
+                    className={`form-control ${errors.cvv ? 'is-invalid' : ''}`}
+                  />
+                  {errors.cvv && <div className="invalid-feedback">{errors.cvv}</div>}
+                </div>
+                <div className="form-group">
+                  <label htmlFor="expiryDate">Expiry Date*</label>
+                  <input
+                    type="text"
+                    name="expiryDate"
+                    value={form.expiryDate}
+                    onChange={handleChange}
+                    className={`form-control ${errors.expiryDate ? 'is-invalid' : ''}`}
+                  />
+                  {errors.expiryDate && <div className="invalid-feedback">{errors.expiryDate}</div>}
+                </div>
+                <div className="form-group">
+                  <label htmlFor="nameOnCard">Name on Card*</label>
+                  <input
+                    type="text"
+                    name="nameOnCard"
+                    value={form.nameOnCard}
+                    onChange={handleChange}
+                    className={`form-control ${errors.nameOnCard ? 'is-invalid' : ''}`}
+                  />
+                  {errors.nameOnCard && <div className="invalid-feedback">{errors.nameOnCard}</div>}
+                </div>
+                <button type="submit" className="btn btn-primary w-100">Check Out</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div className="summary">
+          <h3>Summary</h3>
+          <p>Sub Total: 115/-</p>
+          <p>Service Charges: 50/-</p>
+          <p>Total Payables: 163/-</p>
+          <Link to="#">Have a discount code?</Link>
+        </div>
+      </div>
+      <footer className='d-flex justify-content-around mt-4'>
+        <button className="btn btn-secondary">Go back</button>
+        <div className='d-flex align-items-center'>
+          <p>By clicking the check out button you agree with our</p>
+          <button type="button" data-toggle="modal" data-target="#feedBack" className='btn btn-primary'>Check Out</button>
+        </div>
+      </footer>
+    </div>
+ 
+  )
+}
+ 
+export default PaymentPage
+ 
+ 
